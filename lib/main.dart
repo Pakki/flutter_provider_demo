@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,57 +12,51 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Provider demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Provider<String>(
+      create: (context) => foo,
+      child: MaterialApp(
+        title: 'Provider demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(foo),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  final String foo;
-  MyHomePage(this.foo);
+  MyHomePage();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(foo),
+        title: Text(context.watch<String>()),
       ),
-      body: Widget1(foo: foo),
+      body: Widget1(),
     );
   }
 }
 
 class Widget1 extends StatelessWidget {
-  final String foo;
-  const Widget1({Key? key, required this.foo}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Widget2(foo: foo);
+    return Widget2();
   }
 }
 
 class Widget2 extends StatelessWidget {
-  final String foo;
-  const Widget2({Key? key, required this.foo}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Widget3(foo: foo);
+    return Widget3();
   }
 }
 
 class Widget3 extends StatelessWidget {
-  final String foo;
-  const Widget3({Key? key, required this.foo}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    String foo = context.watch<String>();
     return Center(
       child: Text(foo),
     );
