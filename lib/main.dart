@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import './foo.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final String foo = 'This is test string foo';
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Provider<String>(
-      create: (context) => foo,
+    return ChangeNotifierProvider<Foo>(
+      create: (context) => Foo(),
       child: MaterialApp(
         title: 'Provider demo',
         theme: ThemeData(
@@ -32,7 +33,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.watch<String>()),
+        title: Text(context.watch<Foo>().getFoo),
       ),
       body: Widget1(),
     );
@@ -56,9 +57,25 @@ class Widget2 extends StatelessWidget {
 class Widget3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String foo = context.watch<String>();
-    return Center(
-      child: Text(foo),
+    String foo = context.watch<Foo>().getFoo;
+    return Column(
+      children: [
+        Center(
+          child: Text(foo),
+        ),
+        MyTextField(),
+      ],
+    );
+  }
+}
+
+class MyTextField extends StatelessWidget {
+  const MyTextField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: (value) => context.read<Foo>().changeString(value),
     );
   }
 }
